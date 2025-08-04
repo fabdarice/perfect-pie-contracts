@@ -2,6 +2,10 @@
 
 A signature-based ERC20 token contract deployed on Base blockchain with advanced claiming mechanisms and burn functionality.
 
+## 🚀 Deployed Contract
+
+**Base Mainnet**: [`0xA0CfF887a64CBB93037319f57B896fD7812fA863`](https://basescan.org/address/0xA0CfF887a64CBB93037319f57B896fD7812fA863)
+
 ## 📋 Overview
 
 **Perfect Pie (PIE)** is an ERC20 token with the following features:
