@@ -2,6 +2,7 @@
 .env
 .env.local
 .env.production
+.env.prod
 
 # Foundry
 cache/
@@ -35,4 +36,9 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
-EOF < /dev/null
+
+# Generated files
+flattened.sol
+
+# Deployment artifacts
+deployments/
