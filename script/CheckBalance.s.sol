@@ -44,9 +44,9 @@ contract CheckBalanceScript is Script {
         console.log("Estimated cost (ETH):", estimatedCost / 1e18);
         
         if (balance >= estimatedCost) {
-            console.log("✅ Sufficient balance for deployment");
+            console.log("Sufficient balance for deployment");
         } else {
-            console.log("❌ Insufficient balance for deployment");
+            console.log("Insufficient balance for deployment");
             console.log("Need additional:", (estimatedCost - balance) / 1e18, "ETH");
         }
     }

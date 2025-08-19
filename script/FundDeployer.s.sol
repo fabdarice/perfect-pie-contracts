@@ -16,6 +16,6 @@ contract FundDeployerScript is Script {
         console.log("Required balance:", requiredBalance / 1e15, "milliETH");
         console.log("Amount needed:", amountNeeded / 1e15, "milliETH");
         console.log("\nSend at least", amountNeeded, "wei to the deployer address");
-        console.log("Or approximately", (amountNeeded / 1e18) + 0.0001, "ETH (with buffer)");
+        console.log("Or approximately", amountNeeded / 1e18, "ETH (plus buffer)");
     }
 }
