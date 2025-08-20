@@ -13,7 +13,7 @@ contract DeploymentGuideScript is Script {
         string memory network = getNetworkName();
         console.log("Current network:", network);
         console.log("Chain ID:", block.chainid);
-        
+
         if (block.chainid != 8453 && block.chainid != 84532) {
             console.log("\n[WARNING] Not on Base mainnet or testnet!");
         }
@@ -28,10 +28,10 @@ contract DeploymentGuideScript is Script {
         console.log("4. [ ] Deployment script reviewed");
 
         console.log("\n=== Deployment Commands ===");
-        
+
         console.log("\n1. Dry run (simulation only):");
         console.log("   forge script script/DeployMainnet.s.sol --rpc-url base_mainnet");
-        
+
         console.log("\n2. Deploy with confirmation prompt:");
         console.log("   REQUIRE_CONFIRMATION=true forge script script/DeployMainnetSafe.s.sol \\");
         console.log("     --rpc-url base_mainnet \\");
@@ -40,7 +40,7 @@ contract DeploymentGuideScript is Script {
         console.log("     --gas-estimate-multiplier 120 \\");
         console.log("     --interactives 1 \\");
         console.log("     -vvvv");
-        
+
         console.log("\n3. Deploy without confirmation:");
         console.log("   forge script script/DeployMainnet.s.sol \\");
         console.log("     --rpc-url base_mainnet \\");
@@ -55,10 +55,10 @@ contract DeploymentGuideScript is Script {
         console.log("     --resume");
 
         console.log("\n=== Post-deployment Commands ===");
-        
+
         console.log("\n1. Verify deployed contract:");
         console.log("   CONTRACT_ADDRESS=0x... forge script script/VerifyContract.s.sol --rpc-url base_mainnet");
-        
+
         console.log("\n2. Manual verification on BaseScan:");
         console.log("   forge verify-contract <CONTRACT_ADDRESS> \\");
         console.log("     src/PerfectPieToken.sol:PerfectPie \\");
@@ -69,11 +69,11 @@ contract DeploymentGuideScript is Script {
         uint256 estimatedGas = 1_500_000; // Approximate gas for token deployment
         uint256[] memory gasPrices = new uint256[](3);
         gasPrices[0] = 0.1 gwei; // Low
-        gasPrices[1] = 1 gwei;   // Average
-        gasPrices[2] = 5 gwei;   // High
+        gasPrices[1] = 1 gwei; // Average
+        gasPrices[2] = 5 gwei; // High
 
         console.log("\nEstimated deployment costs:");
-        for (uint i = 0; i < gasPrices.length; i++) {
+        for (uint256 i = 0; i < gasPrices.length; i++) {
             uint256 cost = estimatedGas * gasPrices[i];
             string memory label = i == 0 ? "Low" : i == 1 ? "Average" : "High";
             console.log(

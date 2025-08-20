@@ -35,14 +35,8 @@ contract VerifyContractScript is Script {
         console.log("Owner:", token.owner());
 
         // Verify expected values
-        require(
-            keccak256(bytes(token.name())) == keccak256(bytes("Perfect Pie")),
-            "Unexpected token name"
-        );
-        require(
-            keccak256(bytes(token.symbol())) == keccak256(bytes("PIE")),
-            "Unexpected token symbol"
-        );
+        require(keccak256(bytes(token.name())) == keccak256(bytes("Perfect Pie")), "Unexpected token name");
+        require(keccak256(bytes(token.symbol())) == keccak256(bytes("PIE")), "Unexpected token symbol");
         require(token.decimals() == 18, "Unexpected decimals");
         require(token.totalSupply() == 10e9 * 10 ** 18, "Unexpected total supply");
 

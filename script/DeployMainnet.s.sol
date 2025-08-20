@@ -22,12 +22,9 @@ contract DeployMainnetScript is Script {
         uint256 balance = deployer.balance;
         console.log("Deployer ETH balance:", balance / 1e18, "ETH");
         console.log("Deployer ETH balance (Wei):", balance);
-        
+
         // Require minimum balance for deployment and gas
-        require(
-            balance >= 0.05 ether,
-            "Insufficient ETH balance - need at least 0.05 ETH for deployment"
-        );
+        require(balance >= 0.05 ether, "Insufficient ETH balance - need at least 0.05 ETH for deployment");
 
         // Estimate gas price
         uint256 gasPrice = tx.gasprice;
@@ -65,7 +62,7 @@ contract DeployMainnetScript is Script {
         console.log("   forge verify-contract", address(token), "src/PerfectPieToken.sol:PerfectPie --chain base");
         console.log("3. Update project documentation with deployed address");
         console.log("4. Configure signature generation for token claims");
-        
+
         return token;
     }
 }

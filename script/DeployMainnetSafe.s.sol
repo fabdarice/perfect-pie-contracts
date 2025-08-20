@@ -20,7 +20,7 @@ contract DeployMainnetSafeScript is Script {
         // Load configuration
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address deployer = vm.addr(deployerPrivateKey);
-        
+
         // Optional: Load owner address (defaults to deployer if not set)
         address owner = deployer;
         try vm.envAddress("OWNER_ADDRESS") returns (address envOwner) {
@@ -47,7 +47,7 @@ contract DeployMainnetSafeScript is Script {
         vm.startPrank(deployer);
         PerfectPie simulatedToken = new PerfectPie(owner);
         vm.stopPrank();
-        
+
         console.log("Simulation successful!");
         console.log("Estimated contract address:", address(simulatedToken));
 
@@ -58,7 +58,7 @@ contract DeployMainnetSafeScript is Script {
         } catch {
             // Default to false if not set
         }
-        
+
         if (requireConfirmation) {
             console.log("\n[WARNING] Ready to deploy to Base mainnet!");
             console.log("Contract will be owned by:", owner);
@@ -69,9 +69,9 @@ contract DeployMainnetSafeScript is Script {
         // Actual deployment
         console.log("\n=== Starting Deployment ===");
         vm.startBroadcast(deployerPrivateKey);
-        
+
         PerfectPie token = new PerfectPie(owner);
-        
+
         vm.stopBroadcast();
 
         // Post-deployment verification
@@ -123,16 +123,10 @@ contract DeployMainnetSafeScript is Script {
         console.log("\n=== Post-deployment Verification ===");
 
         // Verify basic token properties
-        require(
-            keccak256(bytes(token.name())) == keccak256(bytes(EXPECTED_NAME)),
-            "Token name mismatch"
-        );
+        require(keccak256(bytes(token.name())) == keccak256(bytes(EXPECTED_NAME)), "Token name mismatch");
         console.log("[OK] Token name:", token.name());
 
-        require(
-            keccak256(bytes(token.symbol())) == keccak256(bytes(EXPECTED_SYMBOL)),
-            "Token symbol mismatch"
-        );
+        require(keccak256(bytes(token.symbol())) == keccak256(bytes(EXPECTED_SYMBOL)), "Token symbol mismatch");
         console.log("[OK] Token symbol:", token.symbol());
 
         require(token.decimals() == EXPECTED_DECIMALS, "Token decimals mismatch");
@@ -146,10 +140,7 @@ contract DeployMainnetSafeScript is Script {
         console.log("[OK] Contract owner:", token.owner());
 
         // Verify contract balance
-        require(
-            token.getContractBalance() == token.totalSupply(),
-            "Contract balance doesn't match total supply"
-        );
+        require(token.getContractBalance() == token.totalSupply(), "Contract balance doesn't match total supply");
         console.log("[OK] Contract balance:", token.getContractBalance() / 1e18, "PIE");
 
         // Verify contract code
@@ -177,16 +168,8 @@ contract DeployMainnetSafeScript is Script {
         console.log("Owner:", token.owner());
     }
 
-    function saveDeploymentArtifact(
-        address tokenAddress,
-        address owner,
-        address deployer
-    ) internal {
-        string memory artifactPath = string.concat(
-            "deployments/",
-            vm.toString(block.chainid),
-            "/PerfectPie.json"
-        );
+    function saveDeploymentArtifact(address tokenAddress, address owner, address deployer) internal {
+        string memory artifactPath = string.concat("deployments/", vm.toString(block.chainid), "/PerfectPie.json");
 
         string memory artifact = string.concat(
             '{"address":"',
