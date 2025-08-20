@@ -15,7 +15,7 @@ contract PerfectPieTokenTest is Test {
     function setUp() public {
         ownerPrivateKey = 0x1234;
         user1PrivateKey = 0x5678;
-        
+
         owner = vm.addr(ownerPrivateKey);
         user1 = vm.addr(user1PrivateKey);
         user2 = makeAddr("user2");
@@ -28,18 +28,18 @@ contract PerfectPieTokenTest is Test {
         assertEq(token.name(), "Perfect Pie");
         assertEq(token.symbol(), "PIE");
         assertEq(token.decimals(), 18);
-        assertEq(token.totalSupply(), 10e9 * 10**18);
-        assertEq(token.balanceOf(address(token)), 10e9 * 10**18);
+        assertEq(token.totalSupply(), 10e9 * 10 ** 18);
+        assertEq(token.balanceOf(address(token)), 10e9 * 10 ** 18);
         assertEq(token.owner(), owner);
     }
 
     function testClaimWithValidSignature() public {
-        uint256 amount = 1000 * 10**18;
+        uint256 amount = 1000 * 10 ** 18;
         uint256 epoch = 1;
-        
+
         bytes32 messageHash = keccak256(abi.encodePacked(user1, amount, epoch));
         bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
-        
+
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, ethSignedMessageHash);
         bytes memory signature = abi.encodePacked(r, s, v);
 
@@ -57,12 +57,12 @@ contract PerfectPieTokenTest is Test {
     }
 
     function testClaimRejectsReusedSignature() public {
-        uint256 amount = 1000 * 10**18;
+        uint256 amount = 1000 * 10 ** 18;
         uint256 epoch = 1;
-        
+
         bytes32 messageHash = keccak256(abi.encodePacked(user1, amount, epoch));
         bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
-        
+
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, ethSignedMessageHash);
         bytes memory signature = abi.encodePacked(r, s, v);
 
@@ -73,12 +73,12 @@ contract PerfectPieTokenTest is Test {
     }
 
     function testClaimRejectsInvalidSignature() public {
-        uint256 amount = 1000 * 10**18;
+        uint256 amount = 1000 * 10 ** 18;
         uint256 epoch = 1;
-        
+
         bytes32 messageHash = keccak256(abi.encodePacked(user1, amount, epoch));
         bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
-        
+
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(user1PrivateKey, ethSignedMessageHash);
         bytes memory signature = abi.encodePacked(r, s, v);
 
@@ -87,12 +87,12 @@ contract PerfectPieTokenTest is Test {
     }
 
     function testClaimRejectsZeroAddress() public {
-        uint256 amount = 1000 * 10**18;
+        uint256 amount = 1000 * 10 ** 18;
         uint256 epoch = 1;
-        
+
         bytes32 messageHash = keccak256(abi.encodePacked(address(0), amount, epoch));
         bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
-        
+
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, ethSignedMessageHash);
         bytes memory signature = abi.encodePacked(r, s, v);
 
@@ -103,10 +103,10 @@ contract PerfectPieTokenTest is Test {
     function testClaimRejectsZeroAmount() public {
         uint256 amount = 0;
         uint256 epoch = 1;
-        
+
         bytes32 messageHash = keccak256(abi.encodePacked(user1, amount, epoch));
         bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
-        
+
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, ethSignedMessageHash);
         bytes memory signature = abi.encodePacked(r, s, v);
 
@@ -117,10 +117,10 @@ contract PerfectPieTokenTest is Test {
     function testClaimRejectsInsufficientContractBalance() public {
         uint256 amount = token.getContractBalance() + 1;
         uint256 epoch = 1;
-        
+
         bytes32 messageHash = keccak256(abi.encodePacked(user1, amount, epoch));
         bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
-        
+
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, ethSignedMessageHash);
         bytes memory signature = abi.encodePacked(r, s, v);
 
@@ -129,18 +129,18 @@ contract PerfectPieTokenTest is Test {
     }
 
     function testBurnFunctionality() public {
-        uint256 amount = 1000 * 10**18;
+        uint256 amount = 1000 * 10 ** 18;
         uint256 epoch = 1;
-        
+
         bytes32 messageHash = keccak256(abi.encodePacked(user1, amount, epoch));
         bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
-        
+
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, ethSignedMessageHash);
         bytes memory signature = abi.encodePacked(r, s, v);
 
         token.claim(user1, amount, epoch, signature);
 
-        uint256 burnAmount = 500 * 10**18;
+        uint256 burnAmount = 500 * 10 ** 18;
         uint256 initialTotalSupply = token.totalSupply();
         uint256 initialUserBalance = token.balanceOf(user1);
 
@@ -151,14 +151,13 @@ contract PerfectPieTokenTest is Test {
         assertEq(token.balanceOf(user1), initialUserBalance - burnAmount);
     }
 
-
     function testMultipleClaimsWithDifferentEpochs() public {
-        uint256 amount = 1000 * 10**18;
-        
+        uint256 amount = 1000 * 10 ** 18;
+
         for (uint256 epoch = 1; epoch <= 3; epoch++) {
             bytes32 messageHash = keccak256(abi.encodePacked(user1, amount, epoch));
             bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
-            
+
             (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, ethSignedMessageHash);
             bytes memory signature = abi.encodePacked(r, s, v);
 
@@ -169,20 +168,20 @@ contract PerfectPieTokenTest is Test {
     }
 
     function testGetContractBalance() public {
-        uint256 expectedBalance = 10e9 * 10**18;
+        uint256 expectedBalance = 10e9 * 10 ** 18;
         assertEq(token.getContractBalance(), expectedBalance);
-        
-        uint256 amount = 1000 * 10**18;
+
+        uint256 amount = 1000 * 10 ** 18;
         uint256 epoch = 1;
-        
+
         bytes32 messageHash = keccak256(abi.encodePacked(user1, amount, epoch));
         bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
-        
+
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, ethSignedMessageHash);
         bytes memory signature = abi.encodePacked(r, s, v);
 
         token.claim(user1, amount, epoch, signature);
-        
+
         assertEq(token.getContractBalance(), expectedBalance - amount);
     }
 }

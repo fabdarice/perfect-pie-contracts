@@ -9,12 +9,12 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
-contract PerfectPieV2 is 
+contract PerfectPieV2 is
     Initializable,
-    ERC20Upgradeable, 
-    ERC20BurnableUpgradeable, 
+    ERC20Upgradeable,
+    ERC20BurnableUpgradeable,
     OwnableUpgradeable,
-    UUPSUpgradeable 
+    UUPSUpgradeable
 {
     using ECDSA for bytes32;
     using MessageHashUtils for bytes32;
@@ -23,18 +23,9 @@ contract PerfectPieV2 is
 
     mapping(bytes32 => bool) public usedSignatures;
 
-    event Claimed(
-        address indexed receiver,
-        uint256 amount,
-        uint256 epoch,
-        bytes32 signatureHash
-    );
+    event Claimed(address indexed receiver, uint256 amount, uint256 epoch, bytes32 signatureHash);
 
-    event AdminBurn(
-        address indexed from,
-        uint256 amount,
-        address indexed admin
-    );
+    event AdminBurn(address indexed from, uint256 amount, address indexed admin);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -46,26 +37,16 @@ contract PerfectPieV2 is
         __ERC20Burnable_init();
         __Ownable_init(initialOwner);
         __UUPSUpgradeable_init();
-        
+
         _mint(address(this), MAX_SUPPLY);
     }
 
-    function claim(
-        address receiver,
-        uint256 amount,
-        uint256 epoch,
-        bytes memory signature
-    ) external {
+    function claim(address receiver, uint256 amount, uint256 epoch, bytes memory signature) external {
         require(receiver != address(0), "Invalid receiver address");
         require(amount > 0, "Amount must be greater than 0");
-        require(
-            balanceOf(address(this)) >= amount,
-            "Insufficient contract balance"
-        );
+        require(balanceOf(address(this)) >= amount, "Insufficient contract balance");
 
-        bytes32 messageHash = keccak256(
-            abi.encodePacked(receiver, amount, epoch)
-        );
+        bytes32 messageHash = keccak256(abi.encodePacked(receiver, amount, epoch));
         bytes32 ethSignedMessageHash = messageHash.toEthSignedMessageHash();
 
         bytes32 signatureHash = keccak256(signature);
@@ -90,9 +71,9 @@ contract PerfectPieV2 is
         require(from != address(0), "Cannot burn from zero address");
         require(amount > 0, "Amount must be greater than 0");
         require(balanceOf(from) >= amount, "Insufficient balance to burn");
-        
+
         _burn(from, amount);
-        
+
         emit AdminBurn(from, amount, msg.sender);
     }
 
@@ -104,9 +85,5 @@ contract PerfectPieV2 is
      * @dev Required override for UUPS proxy pattern
      * Only owner can authorize upgrades
      */
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        override
-        onlyOwner
-    {}
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 }

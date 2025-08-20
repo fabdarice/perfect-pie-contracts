@@ -9,9 +9,7 @@ contract DeployScript is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address deployer = vm.addr(deployerPrivateKey);
 
-        string memory network = block.chainid == 8453
-            ? "Base Mainnet"
-            : "Base Sepolia";
+        string memory network = block.chainid == 8453 ? "Base Mainnet" : "Base Sepolia";
         console.log("=== Deploying Perfect Pie Token to", network, "===");
         console.log("Deployer address:", deployer);
         console.log("Chain ID:", block.chainid);
@@ -19,10 +17,7 @@ contract DeployScript is Script {
         // Get deployer balance to ensure sufficient funds
         uint256 balance = deployer.balance;
         console.log("Deployer ETH balance:", balance, "Wei");
-        require(
-            balance > 0.01 ether,
-            "Insufficient ETH balance for deployment"
-        );
+        require(balance > 0.01 ether, "Insufficient ETH balance for deployment");
 
         vm.startBroadcast(deployerPrivateKey);
 
@@ -36,24 +31,13 @@ contract DeployScript is Script {
         console.log("Token symbol:", token.symbol());
         console.log("Decimals:", token.decimals());
         console.log("Total supply:", token.totalSupply() / 1e18, "PIE");
-        console.log(
-            "Contract balance:",
-            token.getContractBalance() / 1e18,
-            "PIE"
-        );
+        console.log("Contract balance:", token.getContractBalance() / 1e18, "PIE");
         console.log("Owner:", token.owner());
 
         console.log("=== Next Steps ===");
         console.log("1. Verify contract on BaseScan:");
-        string memory chainFlag = block.chainid == 8453
-            ? "--chain base"
-            : "--chain base-sepolia";
-        console.log(
-            "   forge verify-contract",
-            address(token),
-            "src/PerfectPieToken.sol:PerfectPie",
-            chainFlag
-        );
+        string memory chainFlag = block.chainid == 8453 ? "--chain base" : "--chain base-sepolia";
+        console.log("   forge verify-contract", address(token), "src/PerfectPieToken.sol:PerfectPie", chainFlag);
         console.log("2. Contract is ready for signature-based token claims!");
     }
 }

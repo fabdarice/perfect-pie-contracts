@@ -9,7 +9,7 @@ contract FundDeployerScript is Script {
         uint256 currentBalance = deployerAddress.balance;
         uint256 requiredBalance = 0.01 ether;
         uint256 amountNeeded = requiredBalance - currentBalance;
-        
+
         console.log("=== Fund Deployer Address ===");
         console.log("Deployer:", deployerAddress);
         console.log("Current balance:", currentBalance / 1e15, "milliETH");

@@ -15,35 +15,18 @@ contract PerfectPie is ERC20, ERC20Burnable, Ownable {
 
     mapping(bytes32 => bool) public usedSignatures;
 
-    event Claimed(
-        address indexed receiver,
-        uint256 amount,
-        uint256 epoch,
-        bytes32 signatureHash
-    );
+    event Claimed(address indexed receiver, uint256 amount, uint256 epoch, bytes32 signatureHash);
 
-    constructor(
-        address initialOwner
-    ) ERC20("Perfect Pie", "PIE") Ownable(initialOwner) {
+    constructor(address initialOwner) ERC20("Perfect Pie", "PIE") Ownable(initialOwner) {
         _mint(address(this), MAX_SUPPLY);
     }
 
-    function claim(
-        address receiver,
-        uint256 amount,
-        uint256 epoch,
-        bytes memory signature
-    ) external {
+    function claim(address receiver, uint256 amount, uint256 epoch, bytes memory signature) external {
         require(receiver != address(0), "Invalid receiver address");
         require(amount > 0, "Amount must be greater than 0");
-        require(
-            balanceOf(address(this)) >= amount,
-            "Insufficient contract balance"
-        );
+        require(balanceOf(address(this)) >= amount, "Insufficient contract balance");
 
-        bytes32 messageHash = keccak256(
-            abi.encodePacked(receiver, amount, epoch)
-        );
+        bytes32 messageHash = keccak256(abi.encodePacked(receiver, amount, epoch));
         bytes32 ethSignedMessageHash = messageHash.toEthSignedMessageHash();
 
         bytes32 signatureHash = keccak256(signature);
